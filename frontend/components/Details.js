@@ -7,7 +7,6 @@ import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import Add_User from "./Add_User.js";
 import { usePathname } from "next/navigation";
-import { set } from "mongoose";
 const Details = () => {
   const router = useRouter();
   const [username, setusername] = useState("")
