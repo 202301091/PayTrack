@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+
+/* Toast container card */
+.custom-toast {
+  border-radius: 14px !important;
+  background: linear-gradient(135deg, #e2e9e3, #7a2fd5) !important;
+  color: #1e293b !important;
+  box-shadow: 0 12px 30px rgba(79, 70, 229, 0.15) !important;
+  border: 1px solid #c7d2fe;
+}
+
+/* Toast text */
+.custom-toast-body {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Progress bar */
+.custom-toast-progress {
+  background: linear-gradient(to right, #6366f1, #4f46e5) !important;
+}
+
+/* Hide scrollbar but keep scroll working */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
