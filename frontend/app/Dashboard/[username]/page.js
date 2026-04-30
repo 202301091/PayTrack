@@ -5,7 +5,6 @@ import Details from "../../../components/Details";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
-import { set } from "mongoose";
 const Dashboard = () => {
   const [Data, setData] = useState({
     email: "",
