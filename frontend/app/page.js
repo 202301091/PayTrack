@@ -53,6 +53,11 @@ export default function Home() {
 
 
   const onSubmit = async () => {
+    //Check password Strength
+    if(!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}/.test(form.password)) {
+      toast.error("Password must contain at least 8 characters, including uppercase, lowercase, number, and special character.");
+      return;
+    }
 
     if (!agree) {
       toast.error("You must agree to receive transactional emails to proceed.");

@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Details from "../../../components/Details";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
-
+import { set } from "mongoose";
 const Dashboard = () => {
   const [Data, setData] = useState({
     email: "",
@@ -14,7 +14,15 @@ const Dashboard = () => {
     razorpay_id: "",
     razorpay_secret: "",
   });
-   const [showDetails, setShowDetails] = useState(false);
+  const [originalData, setOriginalData] = useState({
+    email: "",
+    username: "",
+    profile_pic: "",
+    razorpay_id: "",
+    razorpay_secret: "",
+  });
+  const formRef = useRef(null);
+  const [showDetails, setShowDetails] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -24,6 +32,22 @@ const Dashboard = () => {
     }
     fetchDetails();
   }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (formRef.current && !formRef.current.contains(event.target)) {
+        // 👉 reset to original data
+        setData(originalData);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [originalData]);
+
 
   const fetchDetails = async () => {
     // Chack the username has no space
@@ -47,14 +71,14 @@ const Dashboard = () => {
       }
 
       setData(data.data);
+      setOriginalData(data.data);
     } catch (error) {
       toast.error(error.message || "Something went wrong");
     }
   };
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setData((prev) => ({ ...prev, [name]: value }));
+    setData({ ...Data, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async () => {
@@ -82,6 +106,7 @@ const Dashboard = () => {
         return;
       }
       setData(data.data);
+      setOriginalData(data.data);
       localStorage.setItem("username", data.data.username);
       localStorage.setItem("profile_pic", data.data.profile_pic);
       toast.success("profile updated successfully 🎉");
@@ -92,49 +117,49 @@ const Dashboard = () => {
 
   return (
     <div className="flex min-h-screen justify-center">
-       
-         {/* MOBILE MENU BUTTON */}
-         <button
-           onClick={() => setShowDetails(true)}
-           className="lg:hidden absolute top-1 left-4 z-40 bg-indigo-500 text-white px-3 py-2 rounded-lg shadow"
-         >
-           ☰
-         </button>
-       
-         {/* DESKTOP SIDEBAR */}
-         <div className="hidden lg:block">
-           <Details />
-         </div>
-       
-         {/* MOBILE SIDEBAR */}
-         {showDetails && (
-           <motion.div
-             initial={{ x: -300 }}
-             animate={{ x: 0 }}
-             exit={{ x: -300 }}
-             transition={{ duration: 0.3 }}
-             className="fixed inset-0 z-50 flex"
-           >
-             {/* overlay */}
-             <div
-               className="absolute inset-0 bg-black/40"
-               onClick={() => setShowDetails(false)}
-             ></div>
-       
-             {/* sidebar */}
-             <div className="relative z-50 no-scrollbar h-full">
-               <Details />
-       
-               {/* close button */}
-               <button
-                 onClick={() => setShowDetails(false)}
-                 className="fixed top-4 left-[75vw] sm:left-[40vw] z-[100] bg-red-500 text-white px-3 py-1 rounded"
-               >
-                 ✕
-               </button>
-             </div>
-           </motion.div>
-         )}
+
+      {/* MOBILE MENU BUTTON */}
+      <button
+        onClick={() => setShowDetails(true)}
+        className="lg:hidden absolute top-1 left-4 z-40 bg-indigo-500 text-white px-3 py-2 rounded-lg shadow"
+      >
+        ☰
+      </button>
+
+      {/* DESKTOP SIDEBAR */}
+      <div className="hidden lg:block">
+        <Details />
+      </div>
+
+      {/* MOBILE SIDEBAR */}
+      {showDetails && (
+        <motion.div
+          initial={{ x: -300 }}
+          animate={{ x: 0 }}
+          exit={{ x: -300 }}
+          transition={{ duration: 0.3 }}
+          className="fixed inset-0 z-50 flex"
+        >
+          {/* overlay */}
+          <div
+            className="absolute inset-0 bg-black/40"
+            onClick={() => setShowDetails(false)}
+          ></div>
+
+          {/* sidebar */}
+          <div className="relative z-50 no-scrollbar h-full">
+            <Details />
+
+            {/* close button */}
+            <button
+              onClick={() => setShowDetails(false)}
+              className="fixed top-4 left-[75vw] sm:left-[40vw] z-[100] bg-red-500 text-white px-3 py-1 rounded"
+            >
+              ✕
+            </button>
+          </div>
+        </motion.div>
+      )}
 
       {/* Main Content */}
       <motion.div
@@ -152,6 +177,7 @@ const Dashboard = () => {
         "
       >
         <div
+          ref={formRef}
           className="
             w-full max-w-2xl
             bg-white/60 backdrop-blur-md
@@ -166,7 +192,7 @@ const Dashboard = () => {
           {/* Header */}
           <div>
             <h1 className="text-lg sm:text-2xl font-semibold text-slate-800">
-              Welcome, {Data.username || "User"} 👋
+              Welcome, {originalData.username}👋
             </h1>
             <p className="text-slate-500">{Data.email}</p>
           </div>
@@ -191,6 +217,7 @@ const Dashboard = () => {
               label="Razorpay ID"
               name="razorpay_id"
               value={Data.razorpay_id}
+              type="password"
               onChange={handleChange}
             />
 

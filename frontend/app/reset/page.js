@@ -12,6 +12,12 @@ const Reset = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleSubmit = async () => {
+
+    if(!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}/.test(password)) {
+      toast.error("Password must contain at least 8 characters, including uppercase, lowercase, number, and special character.");
+      return;
+    }
+
     if (!password || !confirmPassword) {
       toast.error("Please fill all fields");
       return;

@@ -53,48 +53,48 @@ const page = () => {
       transition={{ duration: 0.6, ease: "easeOut" }}
       className="flex min-h-screen bg-gradient-to-br from-blue-200 via-indigo-200 to-sky-300"
     >
-        {/* MOBILE MENU BUTTON */}
-  <button
-    onClick={() => setShowDetails(true)}
-    className="lg:hidden absolute top-1 left-4 z-40 bg-indigo-500 text-white px-3 py-2 rounded-lg shadow"
-  >
-    ☰
-  </button>
+      {/* MOBILE MENU BUTTON */}
+      <button
+        onClick={() => setShowDetails(true)}
+        className="lg:hidden absolute top-1 left-4 z-40 bg-indigo-500 text-white px-3 py-2 rounded-lg shadow"
+      >
+        ☰
+      </button>
 
-  {/* DESKTOP SIDEBAR */}
-  <div className="hidden lg:block">
-    <Details />
-  </div>
-
-  {/* MOBILE SIDEBAR */}
-  {showDetails && (
-    <motion.div
-      initial={{ x: -300 }}
-      animate={{ x: 0 }}
-      exit={{ x: -300 }}
-      transition={{ duration: 0.3 }}
-      className="fixed inset-0 z-50 flex"
-    >
-      {/* overlay */}
-      <div
-        className="absolute inset-0 bg-black/40"
-        onClick={() => setShowDetails(false)}
-      ></div>
-
-      {/* sidebar */}
-      <div className="relative z-50 no-scrollbar h-full">
+      {/* DESKTOP SIDEBAR */}
+      <div className="hidden lg:block">
         <Details />
-
-        {/* close button */}
-        <button
-          onClick={() => setShowDetails(false)}
-          className="fixed top-4 left-[75vw] sm:left-[40vw] z-[100] bg-red-500 text-white px-3 py-1 rounded"
-        >
-          ✕
-        </button>
       </div>
-    </motion.div>
-  )}
+
+      {/* MOBILE SIDEBAR */}
+      {showDetails && (
+        <motion.div
+          initial={{ x: -300 }}
+          animate={{ x: 0 }}
+          exit={{ x: -300 }}
+          transition={{ duration: 0.3 }}
+          className="fixed inset-0 z-50 flex"
+        >
+          {/* overlay */}
+          <div
+            className="absolute inset-0 bg-black/40"
+            onClick={() => setShowDetails(false)}
+          ></div>
+
+          {/* sidebar */}
+          <div className="relative z-50 no-scrollbar h-full">
+            <Details />
+
+            {/* close button */}
+            <button
+              onClick={() => setShowDetails(false)}
+              className="fixed top-4 left-[75vw] sm:left-[40vw] z-[100] bg-red-500 text-white px-3 py-1 rounded"
+            >
+              ✕
+            </button>
+          </div>
+        </motion.div>
+      )}
 
       {/* 🔹 SECOND DIV – CONNECTION LIST */}
       <div className="flex-1 mt-5 lg:mt-0 p-6">
