@@ -107,7 +107,7 @@ const page = () => {
         ) : (
           <div className="grid gap-4 max-w-3xl">
             {collections.map((item) => {
-              // ✅ Decide which user to show (NO logic change, inline only)
+              
               const otherUser =
                 item.user1?.username === username
                   ? item.user2

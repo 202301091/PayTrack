@@ -69,6 +69,14 @@ const Dashboard = () => {
         return;
       }
 
+      //Check status code is 401 then delete the token and redirect to login
+      if(res.status === 401) {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("username");
+        router.push('Sign_in')
+      }
+      
+
       setData(data.data);
       setOriginalData(data.data);
     } catch (error) {

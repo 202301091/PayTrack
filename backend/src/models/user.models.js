@@ -28,6 +28,7 @@ userSchema.pre("save",async function(next){
 })
 
 
+
 userSchema.methods.generateAccessToken=function(){
     return jwt.sign({
         id:this._id,

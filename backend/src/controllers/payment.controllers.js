@@ -4,9 +4,7 @@ import { User } from "../models/user.models.js";
 import asyncHandler from "../utils/asynchandler.js";
 import ApiError from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
-import e from "express";
 
-// 1️⃣ Create Order
 const createOrder = asyncHandler(async (req, res) => {
   try {
     const { amount, creatorId } = req.body;
@@ -15,14 +13,12 @@ const createOrder = asyncHandler(async (req, res) => {
       return res.status(400).json(new ApiError(400, "Amount and Creator ID are required"));
     }
 
-    // 🔎 Find creator
     const creator = await User.findById(creatorId);
 
     if (!creator) {
         return res.status(404).json(new ApiError(404, "Creator not found"));
     }
 
-    // 🔐 Create Razorpay instance for that creator
     const razorpay = createRazorpayInstance(
       creator.razorpay_id,
       creator.razorpay_secret
@@ -47,7 +43,6 @@ const createOrder = asyncHandler(async (req, res) => {
   }
 });
 
-// 2️⃣ Verify Payment
 const verifyPayment = asyncHandler(async (req, res) => {
   try {
     const {
@@ -75,7 +70,6 @@ const verifyPayment = asyncHandler(async (req, res) => {
 
     if (expectedSignature === razorpay_signature) {
 
-      // TODO: Save payment in DB here
 
         return res.status(200).json(new ApiResponse(200,null,"Payment verified successfully"));
 

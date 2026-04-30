@@ -100,7 +100,6 @@ export default function Home() {
     }
   }
   return (
-    // ✅ Background stays SAME
     <div className="flex justify-center items-center min-h-screen py-2 ">
 
       {/* Card Animation */}

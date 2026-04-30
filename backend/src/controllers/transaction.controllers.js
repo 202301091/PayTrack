@@ -8,7 +8,6 @@ const createTransaction = asyncHandler(async (req, res) => {
   const { to, amount,status} = req.body;
   const from = req.user._id;
 
-  // Validate input
   if (!to || !amount || status === undefined) {
     return res
       .status(400)
@@ -21,7 +20,6 @@ const createTransaction = asyncHandler(async (req, res) => {
       .json(new ApiError(400, "Amount must be greater than 0"));
   }
 
-  // Find recipient
   const recipient = await User.findById(to);
 
   if (!recipient) {
@@ -30,7 +28,6 @@ const createTransaction = asyncHandler(async (req, res) => {
       .json(new ApiError(404, "Recipient not found"));
   }
 
-  // Prevent sending request to yourself
   if (recipient._id.toString() === from.toString()) {
     return res
       .status(400)
@@ -39,16 +36,16 @@ const createTransaction = asyncHandler(async (req, res) => {
 
    let description;
    if(status===0){
-    description=`Sent a transaction request of amount ${amount}`;
+    description=`Requested a transaction of amount ${amount} to ${recipient.username}`;
    }else if(status===3){
-    description=`Paid amount ${amount} to recipient's account`;
+    description=`Paid amount ${amount} to  ${recipient.username}`;
    }
   const transaction = await Transaction.create({
     from,
     to: recipient._id,
     amount,
     description,
-    status: 0, 
+    status: status, 
     date: new Date(),
   });
 
@@ -93,7 +90,6 @@ const updateTransactionStatus = asyncHandler(async (req, res) => {
 const transictionsHistory=asyncHandler(async(req,res,next)=>{
     const userId=req.user._id;
     
-    // Send only amount,date,credit or debit ,and the other user's email and username not send the main user details
     const transactions=await Transaction.find({$or:[
         {from:userId},
         {to:userId}
