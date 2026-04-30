@@ -5,7 +5,7 @@ import cors from 'cors';
 const app = express();
 
 app.use(cors({
-    origin:"https://pay-track-delta.vercel.app", 
+    origin:process.env.CORS_ORIGIN_2,
     credentials: true,
 }))
 

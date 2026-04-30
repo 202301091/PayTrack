@@ -10,7 +10,7 @@ export async function sendWithGmail(to, otp) {
   });
 
   await transporter.sendMail({
-    from: `"My App" <${process.env.GMAIL_USER}>`,
+    from: `"PayTrack" <${process.env.GMAIL_USER}>`,
     to,
     subject: "Your OTP Code",
     html: `
@@ -75,7 +75,7 @@ export async function sendWithBrevo(to, otp) {
 
   email.sender = {
     email: process.env.BREVO_SENDER_EMAIL, // must be authenticated
-    name: process.env.BREVO_SENDER_NAME || "My App",
+    name: process.env.BREVO_SENDER_NAME || "PayTrack",
   };
 
   email.to = [{ email: to }];
