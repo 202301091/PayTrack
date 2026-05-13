@@ -1,63 +1,55 @@
 import nodemailer from "nodemailer";
 
+import nodemailer from "nodemailer";
+
 export async function sendWithGmail(to, otp) {
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: process.env.GMAIL_USER,
-      pass: process.env.GMAIL_APP_PASSWORD,
-    },
-  });
+  try {
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true, 
+      auth: {
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_APP_PASSWORD,
+      },
+      tls: {
+        rejectUnauthorized: false,
+      },
+      family: 4, 
+    });
 
-  await transporter.sendMail({
-    from: `"PayTrack" <${process.env.GMAIL_USER}>`,
-    to,
-    subject: "Your OTP Code",
-    html: `
+    await transporter.sendMail({
+      from: `"PayTrack" <${process.env.GMAIL_USER}>`,
+      to,
+      subject: "Your OTP Code",
+      html: `
       <div style="font-family: Arial, Helvetica, sans-serif; background:#f4f6fb; padding:20px;">
-  <div style="max-width:500px; margin:auto; background:#ffffff; padding:24px; border-radius:10px; box-shadow:0 6px 20px rgba(0,0,0,0.08);">
+        <div style="max-width:500px; margin:auto; background:#ffffff; padding:24px; border-radius:10px;">
 
-    <h2 style="color:#4f46e5; text-align:center;">
-      🔐 Verify Your Email
-    </h2>
+          <h2 style="color:#4f46e5; text-align:center;">
+            🔐 Verify Your Email
+          </h2>
 
-    <p style="color:#374151; font-size:14px;">
-      Thank you for signing up with <strong>MyApp Payments</strong>.
-    </p>
+          <p>Use the OTP below:</p>
 
-    <p style="color:#374151; font-size:14px;">
-      To securely verify your account and enable payment features, please use the One-Time Password (OTP) below:
-    </p>
+          <div style="text-align:center; margin:20px 0;">
+            <h1 style="letter-spacing:6px;">
+              ${otp}
+            </h1>
+          </div>
 
-    <div style="text-align:center; margin:20px 0;">
-      <h1 style="letter-spacing:6px; color:#111827;">
-        ${otp}
-      </h1>
-    </div>
+          <p>OTP valid for 10 minutes.</p>
 
-    <p style="color:#374151; font-size:14px;">
-      ⏳ This OTP is valid for <strong>10 minutes</strong>.
-    </p>
+        </div>
+      </div>
+      `,
+    });
 
-    <p style="color:#374151; font-size:14px;">
-      ⚠️ For your security, <strong>do not share this OTP</strong> with anyone — our team will never ask for it.
-    </p>
-
-    <hr style="margin:20px 0; border:none; border-top:1px solid #e5e7eb;" />
-
-    <p style="font-size:12px; color:#6b7280;">
-      If you did not attempt to create an account or make a payment, please ignore this email or contact our support immediately.
-    </p>
-
-    <p style="font-size:12px; color:#6b7280;">
-      © ${new Date().getFullYear()} MyApp Payments. All rights reserved.
-    </p>
-
-  </div>
-</div>
-
-    `,
-  });
+    console.log("Email sent successfully");
+  } catch (error) {
+    console.error("Gmail Error:", error);
+    throw error;
+  }
 }
 
 // src/utils/mailer.brevo.js
