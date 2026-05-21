@@ -9,7 +9,7 @@ app.use(cors({
     credentials: true,
 }))
 
-app.use(express.json({limit:'20kb'})); //Use for parsing JSON bodies
+app.use(express.json({limit:'10mb'})); //Use for parsing JSON bodies
 app.use(express.urlencoded({extended:true, limit:'20kb'})); //Use for parsing URL-encoded bodies
 app.use(express.static('public')); //Serve static files from the 'public' directory
 app.use(cookieParser()); //Use for parsing cookies  
@@ -25,7 +25,7 @@ import otpRoutes from "./routes/otp.routes.js";
 app.use("/api/v1/otp",otpRoutes);
 
 // Payment routes
-import paymentRoutes from "./routes/transaction.routes.js";
+import paymentRoutes from "./routes/payment.routes.js";
 app.use("/api/v1/payments",paymentRoutes);
 
 // connection routes

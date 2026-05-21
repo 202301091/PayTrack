@@ -61,7 +61,7 @@ const DetailsPage = () => {
   const fetchTransactions = async () => {
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_HOST}/payments/with/${params.username2}`,
+        `${process.env.NEXT_PUBLIC_HOST}/transactions/with/${params.username2}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -84,26 +84,25 @@ const DetailsPage = () => {
 
   const handlePayment = async (amount) => {
     const sdkLoaded = await loadRazorpay();
-
     if (!sdkLoaded) {
       toast.error("Razorpay failed to load");
       return;
     }
     try {
+
       const orderRes = await fetch(
         `${process.env.NEXT_PUBLIC_HOST}/payments/create-order`,
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json" , Authorization: `Bearer ${localStorage.getItem("accessToken")}`},
           body: JSON.stringify({
-            amount: Number(amount),
+            amount: amount,
             creatorId: params.username2,
           }),
         }
       );
-
       const orderData = await orderRes.json();
-
+     
       const { order, key_id } = orderData;
 
       const options = {
@@ -148,8 +147,8 @@ const DetailsPage = () => {
 
       const paymentObject = new window.Razorpay(options);
       paymentObject.open();
-    } catch {
-      toast.error("Payment failed");
+    } catch (error) {
+      toast.error(error.message || "Payment failed");
     }
   };
 
@@ -185,7 +184,6 @@ const DetailsPage = () => {
 
     if (text.startsWith("pay ")) {
       const amount = Number(text.split(" ")[1]);
-
       if (!amount) {
         toast.error("Invalid amount");
         return;
